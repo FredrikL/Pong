@@ -43,6 +43,12 @@ void registerWrite(int row,  int col) {
   digitalWrite(latchC, HIGH);
 }
 
+void resetBall()
+{
+  ball_x=3; ball_y = 4;
+  ball_dir_x = 1; ball_dir_y = -1;
+}
+
 void getPlayerPositions()
 {
   p1_pos = analogRead(player_one);
@@ -75,10 +81,24 @@ void checkLocationAndBounce()
   // on x only bounce if player
   // paddle is on same spot
 
-  if(ball_x >= 7)
+  if(ball_x == 7 && ball_y == p1_pos)
     ball_dir_x= -1;
-  else if(ball_x <= 0)
+    else if(ball_x == 7)
+    {
+      // todo: render failure for p1
+      Serial.println("p1 failed");
+      delay(1000);
+      resetBall();
+    }
+  else if(ball_x == 0 && ball_y == p2_pos)
     ball_dir_x = 1;   
+    else if(ball_x == 0)
+    {
+      // todo: rander failiure for p2
+      Serial.println("p2 failed");
+      delay(1000);
+      resetBall();
+    }
 }
 
 void renderPlayerPaddles()
