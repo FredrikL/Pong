@@ -1,3 +1,5 @@
+#include <LiquidCrystal.h>
+
 //  Showoff :)  
 //  randomSeed(analogRead(5));
 //  registerWrite(rows[random(8)], colsR[random(8)]);
@@ -23,6 +25,8 @@ int ball_x=3, ball_y=3;
 int ball_dir_x=1, ball_dir_y=-1;
 int count = 0;
 
+LiquidCrystal lcd(13, 12, 11, 10, 9, 8);
+
 void setup() {
   pinMode(latchPin, OUTPUT);
   pinMode(dataPinRow, OUTPUT);  
@@ -31,6 +35,8 @@ void setup() {
   pinMode(latchC, OUTPUT);
   pinMode(clockC, OUTPUT);  
   Serial.begin(9600);
+  lcd.begin(16,1);
+  lcd.print("oh hai!");
 }
 
 void registerWrite(int row,  int col) {
