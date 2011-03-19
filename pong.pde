@@ -8,10 +8,10 @@
 int colsR[9] = {1,2,4,8,16,32,64,128, 0};
 int rows[9] = {254,253,251,247,239,223,191,127, 255};
 
-const int latchPin = 8;
-const int clockPin = 12;
-const int dataPinRow = 11;
-const int dataPinCol = 10;
+const int latchPin = 4;
+const int clockPin = 7;
+const int dataPinRow = 6;
+const int dataPinCol = 5;
 const int latchC = 2;
 const int clockC = 3;
 
