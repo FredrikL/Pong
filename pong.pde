@@ -122,6 +122,8 @@ int ball_x=3, ball_y=3;
 int ball_dir_x=1, ball_dir_y=-1;
 int count = 0;
 
+int p1_score, p2_score;
+
 #define LCD_CMD 0 
 #define PIN_SCE   8
 #define PIN_RESET 9
@@ -216,26 +218,39 @@ void setup() {
   
   LcdInitialise();
   LcdClear();
+  
+  randomSeed(analogRead(5));
 
-  print("Get ready!"); 
-  delay(1000);
-  gotoXY(0,0);
-  delay(1);
-  print("Set");
-  gotoXY(0,2);
-  delay(1);
+  p1_score = 0;
+  p2_score = 0;
+  printPlayers();
+  printScore();
+}
 
-  delay(1000);
-  print("GO!");
+void printPlayers()
+{
   gotoXY(0,0);
-  delay(1);
-  delay(1000);  
+  LcdString("P1");
+  gotoXY(70,0);
+  LcdString("P2");
+}
+
+void printScore()
+{
+  char buffer[10];
+  sprintf(buffer, "%d", p1_score);
+  gotoXY(0,1);
+  LcdString(buffer);
+  sprintf(buffer, "%d", p2_score);
+  gotoXY(77,1);
+  LcdString(buffer);
+  sprintf(buffer, "");
 }
 
 void print(char *msg)
 {
-  LcdClear();
-//  gotoXY(24,3);
+//  LcdClear();
+  gotoXY(24,3);
   LcdString(msg);
 }
 
@@ -296,8 +311,9 @@ void checkLocationAndBounce()
   {
       // todo: render failure for p1
       print("p1 failed");
-      delay(1000);
+      p2_score++;
       resetBall();
+      printScore();
    }
   else if(ball_x == 0 && ball_y == p2_pos) {
     randomBounceBack();
@@ -306,8 +322,9 @@ void checkLocationAndBounce()
   {
      // todo: rander failiure for p2
      print("p2 failed");
-     delay(1000);
+     p1_score++;
      resetBall();
+     printScore();
   }
 }
 
