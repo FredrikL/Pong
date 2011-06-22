@@ -107,12 +107,9 @@ static const byte ASCII[][5] ={
 int colsR[9] = {1,2,4,8,16,32,64,128, 0};
 int rows[9] = {254,253,251,247,239,223,191,127, 255};
 
-const int latchPin = 4;
-const int clockPin = 7;
-const int dataPinRow = 6;
-const int dataPinCol = 5;
-const int latchC = 2;
-const int clockC = 3;
+const int latchPin = 3;
+const int clockPin = 4;
+const int dataPin = 2;
 
 int player_one = A0;
 int player_two = A1;
@@ -209,11 +206,11 @@ void LcdWrite(byte dc, byte data)
 
 void setup() {
   pinMode(latchPin, OUTPUT);
-  pinMode(dataPinRow, OUTPUT);  
-  pinMode(dataPinCol, OUTPUT);  
+  pinMode(dataPin, OUTPUT);  
+//  pinMode(dataPinCol, OUTPUT);  
   pinMode(clockPin, OUTPUT);
-  pinMode(latchC, OUTPUT);
-  pinMode(clockC, OUTPUT);  
+//  pinMode(latchC, OUTPUT);
+//  pinMode(clockC, OUTPUT);  
   Serial.begin(9600);
   
   LcdInitialise();
@@ -225,6 +222,13 @@ void setup() {
   p2_score = 0;
   printPlayers();
   printScore();
+  
+  print("READY");
+  delay(2000);
+  print("SET");
+  delay(2000);
+  print("GO");
+  delay(2000);
 }
 
 void printPlayers()
@@ -242,7 +246,8 @@ void printScore()
   gotoXY(0,1);
   LcdString(buffer);
   sprintf(buffer, "%d", p2_score);
-  gotoXY(77,1);
+  int len = strlen(buffer);
+  gotoXY(84-(len*7),1);
   LcdString(buffer);
   sprintf(buffer, "");
 }
@@ -250,18 +255,21 @@ void printScore()
 void print(char *msg)
 {
 //  LcdClear();
-  gotoXY(24,3);
+  gotoXY(0,3);
+  LcdString("            ");
+
+  int len = strlen(msg);  
+  gotoXY(42-((len/2)*7),3);
   LcdString(msg);
 }
 
 void registerWrite(int row,  int col) {
-  digitalWrite(latchPin, LOW);
-  shiftOut(dataPinRow, clockPin, MSBFIRST, row);
-  digitalWrite(latchPin, HIGH);
+  digitalWrite(latchPin, 0);
+  shiftOut(dataPin, clockPin, MSBFIRST, row);
+  shiftOut(dataPin, clockPin, MSBFIRST, col);
+  digitalWrite(latchPin, 1);
 
-  digitalWrite(latchC, LOW);
-  shiftOut(dataPinCol, clockC, MSBFIRST, col);
-  digitalWrite(latchC, HIGH);
+
 }
 
 void resetBall()
